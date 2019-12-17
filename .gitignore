@@ -10,3 +10,5 @@ include
 .idea
 pip-selfcheck.json
 .pytest_cache/
+.eggs/
+_build
