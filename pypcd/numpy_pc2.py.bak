@@ -36,7 +36,6 @@
 '''
 Functions for working with PointCloud2.
 '''
-from __future__ import unicode_literals
 __docformat__ = "restructuredtext en"
 
 import numpy as np

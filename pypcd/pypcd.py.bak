@@ -9,31 +9,19 @@ dimatura@cmu.edu, 2013-2018
 - TODO deal properly with multicount fields
 - TODO better support for rgb nonsense
 """
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
-from builtins import str
-from builtins import zip
-from builtins import map
-from builtins import range
-from builtins import object
 import re
 import struct
 import copy
 from io import StringIO as sio
 import numpy as np
 import warnings
-
-try:
-    import lzma
-except ImportError:
-    from backports import lzma
+import lzma
 
 HAS_SENSOR_MSGS = True
 try:
     from sensor_msgs.msg import PointField
-    from . import numpy_pc2  # needs sensor_msgs
+    import numpy_pc2  # needs sensor_msgs
 except ImportError:
     HAS_SENSOR_MSGS = False
 
@@ -187,7 +175,7 @@ def _metadata_is_consistent(metadata):
     ok = True
     for check, msg in checks:
         if not check(metadata):
-            print(('error:', msg))
+            print('error:', msg)
             ok = False
     return ok
 
@@ -256,7 +244,7 @@ def parse_binary_pc_data(f, dtype, metadata):
 
 
 def parse_binary_compressed_pc_data(f, dtype, metadata):
-    """ Parse lzma-compressed data.
+    """ Parse lzf-compressed data.
     Format is undocumented but seems to be:
     - compressed size of data (uint32)
     - uncompressed size of data (uint32)
@@ -270,7 +258,7 @@ def parse_binary_compressed_pc_data(f, dtype, metadata):
     # TODO what to use as second argument? if buf is None
     # (compressed > uncompressed)
     # should we read buf as raw binary?
-    buf = lzma.decompress(compressed_data, uncompressed_size)
+    buf = lzf.decompress(compressed_data, uncompressed_size)
     if len(buf) != uncompressed_size:
         raise IOError('Error decompressing data')
     # the data is stored field-by-field
@@ -291,7 +279,7 @@ def point_cloud_from_fileobj(f):
     header = []
     while True:
         ln = f.readline().strip()
-        if isinstance(ln, str):
+        if not isinstance(ln, str):
             ln = ln.decode('utf-8')
         header.append(ln)
         if ln.startswith('DATA'):
@@ -355,7 +343,7 @@ def point_cloud_to_fileobj(pc, fileobj, data_compression=None):
         uncompressed = b''.join(uncompressed_lst)
         uncompressed_size = len(uncompressed)
         # print("uncompressed_size = %r"%(uncompressed_size))
-        buf = lzma.compress(uncompressed)
+        buf = lzf.compress(uncompressed)
         if buf is None:
             # compression didn't shrink the file
             # TODO what do to do in this case when reading?
@@ -411,7 +399,7 @@ def save_xyz_label(pc, fname, use_default_lbl=False):
     if not use_default_lbl and ('label' not in md['fields']):
         raise Exception('label is not a field in this point cloud')
     with open(fname, 'w') as f:
-        for i in range(pc.points):
+        for i in xrange(pc.points):
             x, y, z = ['%.4f' % d for d in (
                 pc.pc_data['x'][i], pc.pc_data['y'][i], pc.pc_data['z'][i]
                 )]
@@ -428,7 +416,7 @@ def save_xyz_intensity_label(pc, fname, use_default_lbl=False):
     if 'intensity' not in md['fields']:
         raise Exception('intensity is not a field in this point cloud')
     with open(fname, 'w') as f:
-        for i in range(pc.points):
+        for i in xrange(pc.points):
             x, y, z = ['%.4f' % d for d in (
                 pc.pc_data['x'][i], pc.pc_data['y'][i], pc.pc_data['z'][i]
                 )]
@@ -451,7 +439,7 @@ def save_txt(pc, fname, header=True):
                 if cnt == 1:
                     header_lst.append(field_name)
                 else:
-                    for c in range(cnt):
+                    for c in xrange(cnt):
                         header_lst.append('%s_%04d' % (field_name, c))
             f.write(' '.join(header_lst)+'\n')
         fmtstr = build_ascii_fmtstr(pc)
@@ -494,7 +482,7 @@ def add_fields(pc, metadata, pc_data):
             fieldnames.append(f)
             typenames.append(np_type)
         else:
-            fieldnames.extend(['%s_%04d' % (f, i) for i in range(c)])
+            fieldnames.extend(['%s_%04d' % (f, i) for i in xrange(c)])
             typenames.extend([np_type]*c)
     dtype = list(zip(fieldnames, typenames))
     # new dtype. could be inferred?
@@ -679,7 +667,7 @@ class PointCloud(object):
     """
 
     def __init__(self, metadata, pc_data):
-        self.metadata_keys = list(metadata.keys())
+        self.metadata_keys = metadata.keys()
         self.__dict__.update(metadata)
         self.pc_data = pc_data
         self.check_sanity()

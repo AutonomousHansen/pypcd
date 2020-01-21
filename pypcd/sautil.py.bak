@@ -1,7 +1,6 @@
 """ Utilities to operate on structured array files directly,
 such as the ``pc_data`` in ``PointCloud`` objects.
 """
-from __future__ import unicode_literals
 
 
 import numpy as np

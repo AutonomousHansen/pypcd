@@ -3,13 +3,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pypcd)
 
-find_package(catkin REQUIRED COMPONENTS
-  rospy
-  sensor_msgs
-)
+find_package(catkin_simple REQUIRED)
+
+catkin_simple(ALL_DEPS_REQUIRED)
 
 catkin_python_setup()
 
-catkin_package(
-  CATKIN_DEPENDS rospy sensor_msgs
-)
+cs_export()
+
+catkin_install_python(PROGRAMS pypcd/pypcd.py
+                               DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
