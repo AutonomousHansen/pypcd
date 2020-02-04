@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """ Utilities to operate on structured array files directly,
 such as the ``pc_data`` in ``PointCloud`` objects.
 """

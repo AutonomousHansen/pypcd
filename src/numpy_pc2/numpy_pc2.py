@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Software License Agreement (BSD License)
 #
 # Copyright (c) 2008, Willow Garage, Inc.
@@ -37,6 +39,27 @@
 Functions for working with PointCloud2.
 '''
 __docformat__ = "restructuredtext en"
+
+__all__ = ['arr_to_fields',
+           'array_to_pointcloud2', 
+           'array_to_xyz_pointcloud2', 
+           'array_to_xyz_pointcloud2f', 
+           'array_to_xyzi_pointcloud2f', 
+           'array_to_xyzl_pointcloud2f', 
+           'arrays_to_xyzi_pointcloud2f', 
+           'get_xyz_points',
+           'merge_rgb_fields', 
+           'np', 
+           'nptype_to_pftype', 
+           'pftype_sizes', 
+           'pftype_to_nptype', 
+           'pointcloud2_to_array',
+           'pointcloud2_to_dtype', 
+           'pointcloud2_to_xyz_array', 
+           'pointfields_to_dtype', 
+           'split_rgb_field', 
+           'type_mappings']
+
 
 import numpy as np
 

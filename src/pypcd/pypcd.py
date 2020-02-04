@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Read and write PCL .pcd files in python.
 dimatura@cmu.edu, 2013-2018
@@ -16,13 +18,9 @@ from io import StringIO as sio
 import numpy as np
 import warnings
 import lzf
-
-HAS_SENSOR_MSGS = True
-try:
-    from sensor_msgs.msg import PointField
-    import numpy_pc2  # needs sensor_msgs
-except ImportError:
-    HAS_SENSOR_MSGS = False
+import inspect
+import numpy_pc2.numpy_pc2 as numpy_pc2
+from sensor_msgs.msg import PointField
 
 __all__ = ['PointCloud',
            'point_cloud_to_path',
@@ -48,8 +46,7 @@ __all__ = ['PointCloud',
            'numpy_type_to_pcd_type',
            ]
 
-if HAS_SENSOR_MSGS:
-    pc2_pcd_type_mappings = [(PointField.INT8, ('I', 1)),
+pc2_pcd_type_mappings = [(PointField.INT8, ('I', 1)),
                              (PointField.UINT8, ('U', 1)),
                              (PointField.INT16, ('I', 2)),
                              (PointField.UINT16, ('U', 2)),
@@ -57,9 +54,9 @@ if HAS_SENSOR_MSGS:
                              (PointField.UINT32, ('U', 4)),
                              (PointField.FLOAT32, ('F', 4)),
                              (PointField.FLOAT64, ('F', 8))]
-    pc2_type_to_pcd_type = dict(pc2_pcd_type_mappings)
-    pcd_type_to_pc2_type = dict((q, p) for (p, q) in pc2_pcd_type_mappings)
-    __all__.extend(['pcd_type_to_pc2_type', 'pc2_type_to_pcd_type'])
+pc2_type_to_pcd_type = dict(pc2_pcd_type_mappings)
+pcd_type_to_pc2_type = dict((q, p) for (p, q) in pc2_pcd_type_mappings)
+__all__.extend(['pcd_type_to_pc2_type', 'pc2_type_to_pcd_type'])
 
 numpy_pcd_type_mappings = [(np.dtype('float32'), ('F', 4)),
                            (np.dtype('float64'), ('F', 8)),
@@ -727,10 +724,10 @@ class PointCloud(object):
         return PointCloud(new_metadata, new_pc_data)
 
     def to_msg(self):
-        if not HAS_SENSOR_MSGS:
-            raise Exception('ROS sensor_msgs not found')
-        # TODO is there some metadata we want to attach?
-        return numpy_pc2.array_to_pointcloud2(self.pc_data)
+        try:
+            return numpy_pc2.array_to_pointcloud2(self.pc_data)
+        except Exception as e:
+            raise(e)
 
     @staticmethod
     def from_path(fname):
@@ -777,8 +774,6 @@ class PointCloud(object):
         """ from pointcloud2 msg
         squeeze: fix when clouds get 1 as first dim
         """
-        if not HAS_SENSOR_MSGS:
-            raise NotImplementedError('ROS sensor_msgs not found')
         md = {'version': .7,
               'fields': [],
               'size': [],
