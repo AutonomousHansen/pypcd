@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-
 import pypcd
+
 
 def data_frame_to_point_cloud(df):
     """ create a PointCloud object from a dataframe.

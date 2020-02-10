@@ -1,7 +1,4 @@
-#!/usr/bin/env python
 
-from __future__ import unicode_literals
-from builtins import range
 import copy
 import numpy as np
 from sensor_msgs.msg import PointField
@@ -251,7 +248,7 @@ def field_dict_list_to_dtypes(field_dicts):
     for f in field_dicts:
         count = f['count']
         if count > 1:
-            for c in range(count):
+            for c in xrange(count):
                 name = '%s_%04d' % (f['name'], c)
                 nptype = _pftype_to_nptype[f['datatype']]
                 dtypes.append((name, nptype))

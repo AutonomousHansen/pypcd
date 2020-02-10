@@ -2,14 +2,12 @@
 
 # This is for use with ROS catkin only.
 
-from __future__ import unicode_literals
 from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
 
 d = generate_distutils_setup(
-    packages=['pypcd','numpy_pc2'],
-    package_dir={'': 'src'},
+    packages=['pypcd'],
+    package_dir={'': ''}
 )
 
 setup(**d)
-
