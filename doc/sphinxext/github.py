@@ -13,10 +13,12 @@ Authors
 * Doug Hellmann
 * Min RK
 """
+from __future__ import unicode_literals
 #
 # Original Copyright (c) 2010 Doug Hellmann.  All rights reserved.
 #
 
+from builtins import str
 from docutils import nodes, utils
 from docutils.parsers.rst.roles import set_classes
 

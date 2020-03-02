@@ -2,6 +2,7 @@
 """Script to auto-generate API docs.
 """
 from __future__ import print_function, division
+from __future__ import unicode_literals
 
 # stdlib imports
 import sys

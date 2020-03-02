@@ -3,7 +3,9 @@ this is just a basic sanity check, not a really legit test suite.
 
 TODO maybe download data here instead of having it in repo
 """
+from __future__ import unicode_literals
 
+from builtins import zip
 import pytest
 import numpy as np
 import os
@@ -152,7 +154,7 @@ def test_path_roundtrip_binary(pcd_fname):
 
     pc2 = pypcd.PointCloud.from_path(tmp_fname)
     md2 = pc2.get_metadata()
-    for k, v in md2.items():
+    for k, v in list(md2.items()):
         if k == 'data':
             assert v == 'binary'
         else:
@@ -180,7 +182,7 @@ def test_path_roundtrip_binary_compressed(pcd_fname):
 
     pc2 = pypcd.PointCloud.from_path(tmp_fname)
     md2 = pc2.get_metadata()
-    for k, v in md2.items():
+    for k, v in list(md2.items()):
         if k == 'data':
             assert v == 'binary_compressed'
         else:

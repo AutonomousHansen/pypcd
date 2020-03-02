@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import re
 
 def dollars_to_math(source):

@@ -17,7 +17,10 @@ It will:
 
 """
 from __future__ import division, absolute_import, print_function
+from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 import sys
 import re
 import pydoc
@@ -34,7 +37,7 @@ from sphinx.util.compat import Directive
 if sys.version_info[0] >= 3:
     sixu = lambda s: s
 else:
-    sixu = lambda s: unicode(s, 'unicode_escape')
+    sixu = lambda s: str(s, 'unicode_escape')
 
 
 def mangle_docstrings(app, what, name, obj, options, lines,
@@ -57,7 +60,7 @@ def mangle_docstrings(app, what, name, obj, options, lines,
         if sys.version_info[0] >= 3:
             doc = str(doc)
         else:
-            doc = unicode(doc)
+            doc = str(doc)
         lines[:] = doc.split(u_NL)
 
     if (app.config.numpydoc_edit_link and hasattr(obj, '__name__') and

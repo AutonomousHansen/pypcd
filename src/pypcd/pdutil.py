@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-import pypcd
+from __future__ import absolute_import
+from __future__ import unicode_literals
+#!/usr/bin/env python
+
+from . import pypcd
 
 def data_frame_to_point_cloud(df):
     """ create a PointCloud object from a dataframe.
